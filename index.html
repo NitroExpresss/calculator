@@ -1,152 +1,278 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Calculator</title>
+    <meta name="description" content="Профессиональный калькулятор рецептов для точного расчета ингредиентов в кулинарии и производстве">
+    <meta name="keywords" content="рецепты, калькулятор, ингредиенты, кулинария, расчет">
+    <title>Калькулятор Рецептов</title>
+
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Sidebar Menu -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-toggle" id="sidebar-toggle">
-            <i>☰</i>
-        </div>
-        <div class="sidebar-menu">
-            <div class="sidebar-menu-item active" data-section="calculator">
-                <i>🧮</i>
-                <span>Калькулятор</span>
-            </div>
-            <div class="sidebar-menu-item" data-section="recipes">
-                <i>📋</i>
-                <span>Рецепты</span>
-            </div>
-            <div class="sidebar-menu-item" data-section="ingredients">
-                <i>🥕</i>
-                <span>Ингредиенты</span>
-            </div>
-            <div class="sidebar-menu-item" id="theme-toggle">
-                <i>🌙</i>
-                <span>Тема</span>
-            </div>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="app">
 
-            
-            <div id="folder-selector" class="folder-selector">
-                <p>Для работы приложения необходимо выбрать рабочую папку</p>
-                <button id="select-folder-btn" class="btn-primary">Выбрать рабочую папку</button>
-            </div>
-            
-            <div id="app-content" class="hidden">
-                <div class="section" id="calculator-section">
-                    <div class="section-header">
-                        <h2>Калькулятор</h2>
-                        <!-- убран значок сворачивания для более чистого интерфейса -->
-                    </div>
-                    <div class="section-content">
-                        <div class="calculator-form">
-                            <div class="form-group">
-                                <label for="calculator-recipe-select">Рецепт:</label>
-                                <select id="calculator-recipe-select"></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="calculator-quantity">Количество товаров:</label>
-                                <input type="number" id="calculator-quantity" placeholder="Количество" min="0" step="1" value="1">
-                            </div>
-                        </div>
-                        <button id="calculate-btn" class="btn-primary">✅</button>
 
-                        <div id="calculator-results" class="calculator-results hidden">
-                            <h3>Результаты расчета:</h3>
-                            <!-- Сводка по расчету: название рецепта, количество товаров и вес одного товара -->
-                            <div id="calculator-summary" class="calculator-results-summary"></div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Ингредиент</th>
-                                        <th>Необходимое количество (г)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="calculator-results-body"></tbody>
-                            </table>
-                        </div>
-                        <hr id="print-separator" class="hidden" style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
-                        <button id="print-btn" class="btn-secondary no-print hidden">🖨️</button>
-                    </div>
+    <!-- Main Application -->
+    <main class="main-content" id="main-content">
+        <div class="app-container">
+            <!-- Welcome Screen / Folder Selection -->
+            <section id="folder-selector" class="welcome-screen" role="region" aria-labelledby="welcome-title">
+                <div class="welcome-content">
+                    <h1 id="welcome-title" class="welcome-title">Калькулятор Рецептов</h1>
+                    <p class="welcome-description">
+                        Профессиональный инструмент для точного расчета ингредиентов в кулинарии и производстве.
+                        Создавайте рецепты, управляйте ингредиентами и рассчитывайте необходимое количество продуктов.
+                    </p>
+                    <button id="select-folder-btn" class="btn-primary btn-large" aria-describedby="folder-help">
+                        <span class="btn-icon">📁</span>
+                        Выбрать рабочую папку
+                    </button>
+                    <p id="folder-help" class="help-text">
+                        Приложение сохранит все ваши рецепты и ингредиенты в выбранной папке
+                    </p>
                 </div>
-                
-                <div class="section" id="recipes-section">
-                    <div class="section-header">
-                        <h2>Рецепты</h2>
-                        <!-- убран значок сворачивания для более чистого интерфейса -->
-                    </div>
+            </section>
+
+            <!-- Main Application Content -->
+            <div id="app-content" class="app-main hidden" role="main">
+                <!-- Calculator Section -->
+                <section class="section calculator-section" id="calculator-section" role="region" aria-labelledby="calculator-title">
+                    <header class="section-header">
+                        <h2 id="calculator-title" class="section-title">
+                            <span class="section-icon">🧮</span>
+                            Калькулятор ингредиентов
+                        </h2>
+                        <p class="section-description">Рассчитайте необходимое количество ингредиентов для любого количества продукции</p>
+                    </header>
+
                     <div class="section-content">
-                        <div id="recipes-list"></div>
-                        
-                        <button id="add-recipe-btn" class="btn-primary">➕</button>
-                        
-                        <div id="recipe-form-container" class="hidden">
-                            <div class="form-group">
-                                <label for="recipe-name">Название рецепта:</label>
-                                <input type="text" id="recipe-name" placeholder="Введите название рецепта">
-                            </div>
-                            <div class="form-group">
-                                <label>Добавление ингредиента:</label>
-                                <div class="recipe-ingredient-form">
-                                    <!--
-                                        Текстовое поле для ввода ингредиента. При вводе появляются подсказки (datalist).
-                                        Если пользователь вводит новый ингредиент и нажимает Enter — ингредиент создаётся.
-                                    -->
-                                    <input type="text" id="recipe-ingredient-input" placeholder="Введите ингредиент" list="ingredient-datalist" autocomplete="off">
-                                    <!-- Список подсказок для существующих ингредиентов. Заполняется динамически -->
-                                    <datalist id="ingredient-datalist"></datalist>
-                                    <input type="number" id="recipe-ingredient-grams" placeholder="Вес (г)" min="0" step="0.01">
-                                    <button id="add-recipe-ingredient-btn" class="btn-small">➕</button>
+                        <form class="calculator-form" role="form" aria-labelledby="calculator-title">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="calculator-recipe-input" class="form-label">
+                                        Выберите рецепт
+                                        <span class="required" aria-label="обязательное поле">*</span>
+                                    </label>
+                                    <input type="text" id="calculator-recipe-input" class="form-input" placeholder="Введите название рецепта" list="recipe-datalist" autocomplete="off" aria-describedby="recipe-input-help" required>
+                                    <datalist id="recipe-datalist"></datalist>
+                                    <div id="recipe-input-help" class="form-help">Выберите рецепт из списка или введите название</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="calculator-quantity" class="form-label">
+                                        Количество продукции
+                                        <span class="required" aria-label="обязательное поле">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" id="calculator-quantity" class="form-input" placeholder="0" min="1" step="1" value="1" aria-describedby="quantity-help" required>
+                                        <span class="input-suffix">шт</span>
+                                    </div>
+                                    <div id="quantity-help" class="form-help">Укажите количество готовой продукции</div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="recipe-grams-per-item">Вес одного товара (г):</label>
-                                <input type="number" id="recipe-grams-per-item" placeholder="Введите вес одного товара" min="0" step="1">
+
+                            <div class="form-actions">
+                                <button type="button" id="calculate-btn" class="btn-primary btn-calculate" disabled aria-describedby="calculate-help">
+                                    <span class="btn-icon">🧮</span>
+                                    Рассчитать ингредиенты
+                                </button>
+                                <div id="calculate-help" class="form-help">Выберите рецепт и укажите количество</div>
                             </div>
-                            <div id="recipe-preview" class="recipe-preview hidden">
-                                <h4>Предпросмотр рецепта:</h4>
-                                <div id="recipe-preview-content"></div>
-                                <div id="recipe-calc-info"></div>
-                                <button id="save-recipe-btn" class="btn-primary">💾 Сохранить рецепт</button>
+                        </form>
+
+                        <!-- Results Section -->
+                        <div id="calculator-results" class="results-section hidden" role="region" aria-labelledby="results-title" aria-live="polite">
+                            <header class="results-header">
+                                <h3 id="results-title" class="results-title">
+                                    <span class="results-icon">📊</span>
+                                    Результаты расчета
+                                </h3>
+                            </header>
+
+                            <!-- Summary -->
+                            <div id="calculator-summary" class="results-summary" aria-label="Сводка расчета"></div>
+
+                            <!-- Ingredients Table -->
+                            <div class="results-table-container">
+                                <table class="results-table" role="table" aria-label="Таблица необходимых ингредиентов">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Ингредиент</th>
+                                            <th scope="col" class="text-right">Необходимое количество</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="calculator-results-body"></tbody>
+                                </table>
                             </div>
                         </div>
+
+                        <!-- Print Button -->
+                        <div class="results-actions hidden">
+                            <button id="print-btn" class="btn-primary btn-print no-print" aria-label="Распечатать результаты">
+                                <span class="btn-icon">🖨️</span>
+                                Печать
+                            </button>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="section" id="ingredients-section">
-                    <div class="section-header">
-                        <h2>Ингредиенты</h2>
-                        <!-- убран значок сворачивания для более чистого интерфейса -->
-                    </div>
+                </section>
+
+                <!-- Recipes Section -->
+                <section class="section recipes-section" id="recipes-section" role="region" aria-labelledby="recipes-title">
+                    <header class="section-header">
+                        <h2 id="recipes-title" class="section-title">
+                            <span class="section-icon">📋</span>
+                            Управление рецептами
+                        </h2>
+                        <p class="section-description">Создавайте и редактируйте рецепты с точными пропорциями ингредиентов</p>
+                    </header>
+
                     <div class="section-content">
-                        <div class="form-group">
-                            <label for="ingredient-name">Добавление ингредиента:</label>
-                            <div class="ingredient-form">
-                                <input type="text" id="ingredient-name" placeholder="Введите название ингредиента">
-                                <button id="add-ingredient-btn" class="btn-small">➕</button>
-                            </div>
+                        <!-- Recipes List -->
+                        <div id="recipes-list" class="recipes-list" role="region" aria-labelledby="recipes-list-title">
+                            <h3 id="recipes-list-title" class="sr-only">Список рецептов</h3>
                         </div>
-                        <div id="ingredients-list"></div>
+
+                        <!-- Add Recipe Button -->
+                        <div class="section-actions">
+                            <button id="add-recipe-btn" class="btn-primary btn-add" aria-describedby="add-recipe-help">
+                                <span class="btn-icon">➕</span>
+                                Создать новый рецепт
+                            </button>
+                            <div id="add-recipe-help" class="form-help">Добавьте рецепт с ингредиентами и их пропорциями</div>
+                        </div>
+
+                        <!-- Recipe Form -->
+                        <form id="recipe-form-container" class="recipe-form-container hidden" role="form" aria-labelledby="recipe-form-title">
+                            <header class="form-header">
+                                <h3 id="recipe-form-title" class="form-title">
+                                    <span class="form-icon">📝</span>
+                                    Создание рецепта
+                                </h3>
+                                <button type="button" class="btn-close" onclick="hideRecipeForm()" aria-label="Закрыть форму">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </header>
+
+                            <div class="form-content">
+                                <div class="form-group">
+                                    <label for="recipe-name" class="form-label">
+                                        Название рецепта
+                                        <span class="required" aria-label="обязательное поле">*</span>
+                                    </label>
+                                    <input type="text" id="recipe-name" class="form-input" placeholder="Например: Шоколадный кекс" aria-describedby="recipe-name-help" required>
+                                    <div id="recipe-name-help" class="form-help">Укажите понятное название для рецепта</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Ингредиенты</label>
+                                    <div class="ingredients-manager">
+                                        <div class="ingredient-input-group">
+                                            <input type="text" id="recipe-ingredient-input" class="form-input" placeholder="Введите название ингредиента" list="ingredient-datalist" autocomplete="off" aria-label="Название ингредиента" aria-describedby="ingredient-input-help">
+                                            <datalist id="ingredient-datalist"></datalist>
+                                            <input type="number" id="recipe-ingredient-grams" class="form-input" placeholder="Вес в граммах" min="0.01" step="0.01" aria-label="Вес ингредиента в граммах" disabled>
+                                            <button type="button" id="add-recipe-ingredient-btn" class="btn-small btn-add" disabled aria-label="Добавить ингредиент в рецепт">
+                                                <span class="btn-icon">➕</span>
+                                            </button>
+                                        </div>
+                                        <div id="ingredient-input-help" class="form-help">Выберите ингредиент из списка или введите новый, затем укажите вес</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="recipe-grams-per-item" class="form-label">
+                                        Вес готового изделия (г)
+                                        <span class="required" aria-label="обязательное поле">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" id="recipe-grams-per-item" class="form-input" placeholder="Например: 150" min="0.01" step="0.01" aria-describedby="grams-per-item-help" required>
+                                        <span class="input-suffix">г</span>
+                                    </div>
+                                    <div id="grams-per-item-help" class="form-help">Укажите вес одного готового изделия в граммах</div>
+                                </div>
+
+                                <!-- Recipe Preview -->
+                                <div id="recipe-preview" class="recipe-preview hidden" role="region" aria-labelledby="preview-title">
+                                    <h4 id="preview-title" class="preview-title">
+                                        <span class="preview-icon">👁️</span>
+                                        Предпросмотр рецепта
+                                    </h4>
+
+                                    <div id="recipe-preview-content" class="preview-content"></div>
+
+                                    <div id="recipe-calc-info" class="preview-calculation" aria-label="Расчетные данные"></div>
+
+                                    <div class="preview-actions">
+                                        <button type="button" id="save-recipe-btn" class="btn-primary btn-save" aria-describedby="save-recipe-help">
+                                            <span class="btn-icon">💾</span>
+                                            Сохранить рецепт
+                                        </button>
+                                        <div id="save-recipe-help" class="form-help">Рецепт будет сохранен в выбранную папку</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
+                </section>
+
+                <!-- Ingredients Section -->
+                <section class="section ingredients-section" id="ingredients-section" role="region" aria-labelledby="ingredients-title">
+                    <header class="section-header">
+                        <h2 id="ingredients-title" class="section-title">
+                            <span class="section-icon">🥕</span>
+                            База ингредиентов
+                        </h2>
+                        <p class="section-description">Управляйте списком доступных ингредиентов для использования в рецептах</p>
+                    </header>
+
+                    <div class="section-content">
+                        <!-- Add Ingredient Form -->
+                        <form class="add-ingredient-form" role="form" aria-labelledby="add-ingredient-title">
+                            <h3 id="add-ingredient-title" class="sr-only">Добавление нового ингредиента</h3>
+
+                            <div class="form-group">
+                                <label for="ingredient-name" class="form-label">
+                                    Название ингредиента
+                                    <span class="required" aria-label="обязательное поле">*</span>
+                                </label>
+                                <input type="text" id="ingredient-name" class="form-input" placeholder="Например: Пшеничная мука" aria-describedby="ingredient-name-help" required>
+                                <div id="ingredient-name-help" class="form-help">Введите название ингредиента на русском языке и нажмите Enter</div>
+                            </div>
+                        </form>
+
+                        <!-- Ingredient Search -->
+                        <div class="search-container">
+                            <input type="text" id="ingredient-search" class="form-input" placeholder="Поиск ингредиентов..." aria-label="Поиск ингредиентов">
+                        </div>
+
+                        <!-- Ingredients List -->
+                        <div id="ingredients-list" class="ingredients-list" role="region" aria-labelledby="ingredients-list-title">
+                            <h3 id="ingredients-list-title" class="sr-only">Список ингредиентов</h3>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
-    </div>
-    
-    <div id="status-message" class="status"></div>
+    </main>
 
+    <!-- Status Messages -->
+    <div id="status-message" class="status-message" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="loading-indicator hidden" role="status" aria-live="polite">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <span class="loading-text">Загрузка...</span>
+    </div>
+
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>
