@@ -173,7 +173,6 @@ function setupEventListeners() {
     // Recipes
     DOM.addRecipeBtn?.addEventListener('click', showRecipeForm);
     DOM.saveRecipeBtn?.addEventListener('click', handleSaveRecipe);
-    DOM.addIngredientBtn?.addEventListener('click', handleAddRecipeIngredient);
 
     // Recipe form inputs
     DOM.gramsPerItemInput?.addEventListener('input', updateRecipePreview);
@@ -1007,26 +1006,20 @@ function updateRecipeIngredientSelect() {
  */
 function updateGramsFieldState() {
     const gramsField = DOM.gramsInput;
-    const addButton = DOM.addIngredientBtn;
 
-    if (!gramsField || !addButton) return;
+    if (!gramsField) return;
 
     const hasSelection = appState.selectedIngredientId !== null;
 
     gramsField.disabled = !hasSelection;
-    addButton.disabled = !hasSelection;
 
     if (!hasSelection) {
         gramsField.value = '';
         gramsField.style.opacity = '0.6';
         gramsField.style.cursor = 'not-allowed';
-        addButton.style.opacity = '0.6';
-        addButton.style.cursor = 'not-allowed';
     } else {
         gramsField.style.opacity = '1';
         gramsField.style.cursor = 'text';
-        addButton.style.opacity = '1';
-        addButton.style.cursor = 'pointer';
     }
 }
 
@@ -1153,10 +1146,9 @@ function updateRecipesList() {
     table.innerHTML = `
         <thead>
             <tr>
+                <th style="text-align: center; width: 80px;">Действие</th>
                 <th>Название рецепта</th>
                 <th>Ингредиенты</th>
-                <th>Вес товара (г/шт)</th>
-                <th style="text-align: center; width: 180px;">Действие</th>
             </tr>
         </thead>
         <tbody id="recipes-table-body"></tbody>
@@ -1169,13 +1161,12 @@ function updateRecipesList() {
     appState.recipes.forEach(recipe => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td><strong>${recipe.name}</strong></td>
-            <td>${getIngredientsText(recipe)}</td>
-            <td>${formatNumber(recipe.gramsPerItem)}</td>
-            <td style="text-align: center; display: flex; gap: 8px;">
-                <button class="btn-small btn-secondary" data-id="${recipe.id}" style="flex: 1;">✏️</button>
-                <button class="btn-small btn-danger" data-id="${recipe.id}" style="flex: 1;">🗑️</button>
+            <td style="text-align: center;">
+                <button class="btn-icon-only btn-secondary" data-id="${recipe.id}" title="Редактировать">✏️</button>
+                <button class="btn-icon-only btn-danger" data-id="${recipe.id}" title="Удалить">🗑️</button>
             </td>
+            <td><strong>${recipe.name} (${formatNumber(recipe.gramsPerItem)} г/шт)</strong></td>
+            <td>${getIngredientsText(recipe)}</td>
         `;
         tbody.appendChild(row);
 

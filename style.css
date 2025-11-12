@@ -245,6 +245,7 @@ body {
 
 .section-header {
     padding: var(--spacing-xl);
+    padding-top: 1rem;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-light);
 }
@@ -278,7 +279,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
+    /* margin-bottom: var(--spacing-xl); */
 }
 
 .form-group {
@@ -319,6 +320,44 @@ body {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
+}
+
+/* Number input spinner styling */
+.form-input[type="number"]::-webkit-outer-spin-button,
+.form-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Custom spinner buttons for number inputs */
+.form-input[type="number"] {
+    position: relative;
+}
+
+.form-input[type="number"]:focus {
+    background-image: linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-primary) 100%);
+}
+
+/* Webkit spinner styling */
+.form-input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.form-input[type="number"]::-webkit-outer-spin-button:hover,
+.form-input[type="number"]::-webkit-inner-spin-button:hover {
+    background: var(--bg-primary);
+}
+
+.form-input[type="number"]::-webkit-outer-spin-button:active,
+.form-input[type="number"]::-webkit-inner-spin-button:active {
+    background: var(--border-color);
 }
 
 /* Calculator form specific styles */
@@ -453,6 +492,29 @@ body {
 
 .btn-icon {
     font-size: 1rem;
+}
+
+.btn-icon-only {
+    padding: var(--spacing-xs);
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin: 0 2px;
+}
+
+.btn-icon-only:hover {
+    background: var(--bg-secondary);
+    border-color: var(--text-secondary);
+    transform: none;
 }
 
 .btn-close {
@@ -658,6 +720,27 @@ body {
 /* ===== RECIPES LIST ===== */
 .recipes-list {
     margin-bottom: var(--spacing-xl);
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar for recipes list */
+.recipes-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.recipes-list::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.recipes-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.recipes-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
 .section-actions {
@@ -668,7 +751,7 @@ body {
 
 /* ===== INGREDIENTS SECTION ===== */
 .add-ingredient-form {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 0;
     padding: var(--spacing-lg);
     background: var(--bg-secondary);
     border-radius: var(--radius-lg);
@@ -676,9 +759,28 @@ body {
 }
 
 .ingredients-list {
-    margin-top: var(--spacing-xl);
+    margin-top: 0;
     max-height: 500px;
     overflow-y: auto;
+}
+
+/* Custom scrollbar for ingredients list */
+.ingredients-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredients-list::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.ingredients-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.ingredients-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
 /* ===== TABLES ===== */
