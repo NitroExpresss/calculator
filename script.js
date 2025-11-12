@@ -13,6 +13,43 @@ const statusMessage = document.getElementById('status-message');
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', initApp);
 
+// Функция переключения темы
+function toggleTheme() {
+    const body = document.body;
+    const themeIcon = document.querySelector('#theme-toggle i');
+    const themeSpan = document.querySelector('#theme-toggle span');
+
+    if (body.classList.contains('dark-theme')) {
+        body.classList.remove('dark-theme');
+        themeIcon.textContent = '🌙';
+        themeSpan.textContent = 'Тема';
+        localStorage.setItem('theme', 'light');
+    } else {
+        body.classList.add('dark-theme');
+        themeIcon.textContent = '☀️';
+        themeSpan.textContent = 'Тема';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// Применение сохраненной темы
+function applySavedTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark'; // По умолчанию тёмная
+    const body = document.body;
+    const themeIcon = document.querySelector('#theme-toggle i');
+    const themeSpan = document.querySelector('#theme-toggle span');
+
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-theme');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeSpan) themeSpan.textContent = 'Тема';
+    } else {
+        body.classList.remove('dark-theme');
+        if (themeIcon) themeIcon.textContent = '🌙';
+        if (themeSpan) themeSpan.textContent = 'Тема';
+    }
+}
+
 // Работа с IndexedDB для сохранения FileSystemDirectoryHandle
 async function initDB() {
     return new Promise((resolve, reject) => {
@@ -58,6 +95,9 @@ async function loadFolderHandle() {
 // Основные функции
 async function initApp() {
     try {
+        // Применяем сохраненную тему
+        applySavedTheme();
+
         // Инициализируем IndexedDB
         await initDB();
 
@@ -87,8 +127,8 @@ function showFolderSelector(isReturningUser = false) {
 function showAppContent() {
     folderSelector.classList.add('hidden');
     appContent.classList.remove('hidden');
-    // По умолчанию показываем калькулятор
-    showSection('calculator');
+    // По умолчанию показываем рецепты
+    showSection('recipes');
 }
 
 function toggleSidebar() {
@@ -129,7 +169,11 @@ function setupEventListeners() {
     document.querySelectorAll('.sidebar-menu-item').forEach(item => {
         item.addEventListener('click', (e) => {
             const section = e.currentTarget.dataset.section;
-            showSection(section);
+            if (section) {
+                showSection(section);
+            } else if (e.currentTarget.id === 'theme-toggle') {
+                toggleTheme();
+            }
         });
     });
 
@@ -894,12 +938,17 @@ function calculateRecipe() {
     const recipeId = parseInt(document.getElementById('calculator-recipe-select').value);
     const quantity = parseFloat(document.getElementById('calculator-quantity').value);
 
+    console.log('calculateRecipe called with recipeId:', recipeId, 'quantity:', quantity);
+    console.log('recipes:', recipes);
+    console.log('ingredients:', ingredients);
+
     if (!recipeId || !quantity || quantity <= 0) {
         showStatus('Выберите рецепт и укажите количество', 'error');
         return;
     }
 
     const recipe = recipes.find(r => r.id === recipeId);
+    console.log('found recipe:', recipe);
     if (!recipe) {
         showStatus('Рецепт не найден', 'error');
         return;
@@ -909,20 +958,28 @@ function calculateRecipe() {
     const totalRecipeGrams = recipe.ingredients.reduce((sum, ing) => sum + ing.grams, 0);
     const itemsFromRecipe = totalRecipeGrams / recipe.gramsPerItem;
 
+    console.log('recipe.ingredients:', recipe.ingredients);
+    console.log('totalRecipeGrams:', totalRecipeGrams, 'itemsFromRecipe:', itemsFromRecipe);
+
     const resultsBody = document.getElementById('calculator-results-body');
     resultsBody.innerHTML = '';
 
     recipe.ingredients.forEach(ing => {
+        console.log('processing ingredient:', ing);
         const ingredient = ingredients.find(i => i.id === ing.ingredientId);
+        console.log('found ingredient:', ingredient);
         if (ingredient) {
             // Расчет необходимого количества: масштабируем рецепт под указанное количество товаров
             const neededGrams = (ing.grams * quantity) / itemsFromRecipe;
+            console.log('neededGrams:', neededGrams);
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${ingredient.name}</td>
                 <td>${formatNumber(neededGrams)} г</td>
             `;
             resultsBody.appendChild(row);
+        } else {
+            console.log('ingredient not found for id:', ing.ingredientId);
         }
     });
 
